@@ -1,0 +1,32 @@
+name: Shipyard
+description: Use the Github Action to run jobs on Staging Environments automatically deployed by Shipyard.
+inputs:
+  api-token:
+    description: Shipyard API token used to fetch necessary environment variables from Shipyard.
+    required: true
+  timeout-minutes:
+    description: Number of minutes to wait for Shipyard environment before timing out.
+    required: false
+
+runs:
+  using: composite
+  steps:
+    - name: Install Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.x'
+    - name: Install Dependencies
+      run: pip install -r $GITHUB_ACTION_PATH/../src/requirements.txt > /dev/null
+      shell: bash
+      # Pass inputs via shell until https://github.com/actions/runner/issues/665 resolved
+    - name: Pass Inputs to Shell
+      run: |
+          echo "INPUT_API_TOKEN=${{ inputs.api-token }}" >> $GITHUB_ENV
+          echo "INPUT_TIMEOUT_MINUTES=${{ inputs.timeout-minutes }}" >> $GITHUB_ENV
+      shell: bash
+    - name: Fetch the Shipyard environment variables
+      run: python $GITHUB_ACTION_PATH/../src/fetch_shipyard_env.py 
+      shell: bash
+branding:
+  icon: git-pull-request
+  color: blue
