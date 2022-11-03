@@ -8,6 +8,7 @@ then put its data in the environment.
 - GITHUB_REF_NAME
 - INPUT_API_TOKEN or SHIPYARD_API_TOKEN
 - INPUT_TIMEOUT_MINUTES or SHIPYARD_TIMEOUT
+- INPUT_APP_NAME or SHIPYARD_APP_NAME
 """
 from __future__ import print_function
 
@@ -65,6 +66,11 @@ if timeout_minutes:
 else:
     timeout_minutes = 60
 
+# Get the app name
+app_name = os.environ.get("INPUT_APP_NAME")
+if not app_name:
+    app_name = os.environ.get("SHIPYARD_APP_NAME")
+
 # Prepare API client
 configuration = swagger_client.Configuration()
 configuration.api_key["x-api-token"] = api_token
@@ -78,7 +84,7 @@ def fetch_shipyard_environment():
     # Hit the Shipyard API
     try:
         response = api_instance.list_environments(
-            org_name=org_name, repo_name=repo, branch=branch
+            org_name=org_name, repo_name=repo, branch=branch, name=app_name
         ).to_dict()
     except ApiException as e:
         exit("ERROR: issue while listing environments via API: {}".format(e))

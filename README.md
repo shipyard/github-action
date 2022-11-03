@@ -47,6 +47,7 @@ The Github Action can be configured by passing inputs or environment variables:
 | --------------- | --------------- |--------------- |
 | `api-token` | Token required to connect to Shipyard's APIs. Can be obtained from your Organization's setting page | -|
 | `timeout-minutes` | Number of minutes to wait for Shipyard environment before timing out. | 60|
+| `app-name` | Filter the environments by name of the application on the Shipyard app. | -|
 
 
 **Environment Variables**
@@ -56,12 +57,14 @@ The Github Action can be configured by passing inputs or environment variables:
     env:
       SHIPYARD_API_TOKEN: ${{ secrets.SHIPYARD_API_TOKEN }}
       SHIPYARD_TIMEOUT: 30
+      INPUT_APP_NAME: 'react-app'
 ```
 
 | Environment Variable | Description | Default Value |
 | --------------- | --------------- |--------------- |
 | `SHIPYARD_API_TOKEN` | Token required to connect to Shipyard's APIs. Can be obtained from your Organization's setting page  |-|
 | `SHIPYARD_TIMEOUT` | Number of minutes to wait for Shipyard environment before timing out. |60|
+| `SHIPYARD_APP_NAME` | Filter the environments by name of the application on the Shipyard app. |-|
 
 **NOTE**: Inputs are given precedence over environment variables.
 
