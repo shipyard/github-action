@@ -32,9 +32,9 @@ if not bash_env_path:
     exit("ERROR: missing GITHUB_ENV environment variable")
 
 # Constants
-org_name = os.environ.get("GITHUB_REPOSITORY_OWNER")
-github_repo = os.environ.get("GITHUB_REPOSITORY")  # org_name/repo
-repo = github_repo.replace(f"{org_name}/", "") if github_repo else None
+repo_owner = os.environ.get("GITHUB_REPOSITORY_OWNER")
+github_repo = os.environ.get("GITHUB_REPOSITORY")  # repo_owner/repo
+repo = github_repo.replace(f"{repo_owner}/", "") if github_repo else None
 # GITHUB_HEAD_REF - The head ref or source branch of the pull request in a workflow run
 branch = os.environ.get("GITHUB_HEAD_REF")
 if not branch:
@@ -84,7 +84,7 @@ def fetch_shipyard_environment():
     # Hit the Shipyard API
     try:
         response = api_instance.list_environments(
-            org_name=org_name, repo_name=repo, branch=branch, name=app_name
+            repo_owner=repo_owner, repo_name=repo, branch=branch, name=app_name
         ).to_dict()
     except ApiException as e:
         exit("ERROR: issue while listing environments via API: {}".format(e))
