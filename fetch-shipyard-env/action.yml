@@ -7,6 +7,9 @@ inputs:
   timeout-minutes:
     description: Number of minutes to wait for Shipyard environment before timing out.
     required: false
+  app-name:
+    description: Filter the environment by name of the application on the Shipyard app. 
+    required: false
 
 runs:
   using: composite
@@ -23,6 +26,7 @@ runs:
       run: |
           echo "INPUT_API_TOKEN=${{ inputs.api-token }}" >> $GITHUB_ENV
           echo "INPUT_TIMEOUT_MINUTES=${{ inputs.timeout-minutes }}" >> $GITHUB_ENV
+          echo "INPUT_APP_NAME=${{ inputs.app-name }}" >> $GITHUB_ENV
       shell: bash
     - name: Fetch the Shipyard environment variables
       run: python $GITHUB_ACTION_PATH/../src/fetch_shipyard_env.py 

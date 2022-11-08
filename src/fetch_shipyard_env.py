@@ -8,6 +8,7 @@ then put its data in the environment.
 - GITHUB_REF_NAME
 - INPUT_API_TOKEN or SHIPYARD_API_TOKEN
 - INPUT_TIMEOUT_MINUTES or SHIPYARD_TIMEOUT
+- INPUT_APP_NAME or SHIPYARD_APP_NAME
 """
 from __future__ import print_function
 
@@ -31,9 +32,9 @@ if not bash_env_path:
     exit("ERROR: missing GITHUB_ENV environment variable")
 
 # Constants
-org_name = os.environ.get("GITHUB_REPOSITORY_OWNER")
-github_repo = os.environ.get("GITHUB_REPOSITORY")  # org_name/repo
-repo = github_repo.replace(f"{org_name}/", "") if github_repo else None
+repo_owner = os.environ.get("GITHUB_REPOSITORY_OWNER")
+github_repo = os.environ.get("GITHUB_REPOSITORY")  # repo_owner/repo
+repo = github_repo.replace(f"{repo_owner}/", "") if github_repo else None
 # GITHUB_HEAD_REF - The head ref or source branch of the pull request in a workflow run
 branch = os.environ.get("GITHUB_HEAD_REF")
 if not branch:
@@ -65,6 +66,11 @@ if timeout_minutes:
 else:
     timeout_minutes = 60
 
+# Get the app name
+app_name = os.environ.get("INPUT_APP_NAME")
+if not app_name:
+    app_name = os.environ.get("SHIPYARD_APP_NAME")
+
 # Prepare API client
 configuration = swagger_client.Configuration()
 configuration.api_key["x-api-token"] = api_token
@@ -77,9 +83,14 @@ def fetch_shipyard_environment():
 
     # Hit the Shipyard API
     try:
-        response = api_instance.list_environments(
-            org_name=org_name, repo_name=repo, branch=branch
-        ).to_dict()
+        args = {
+            "repo_owner": repo_owner,
+            "repo_name": repo,
+            "branch": branch
+        }
+        if app_name:
+            args["name"] = app_name
+        response = api_instance.list_environments(**args).to_dict()
     except ApiException as e:
         exit("ERROR: issue while listing environments via API: {}".format(e))
 
