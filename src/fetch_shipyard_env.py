@@ -172,7 +172,7 @@ def main():
     then put it's data in the bash environment.
     """
 
-    _, environment_data = wait_for_environment()
+    environment_id, environment_data = wait_for_environment()
 
     try:
         # Try to fetch the commit hash of classic environments
@@ -193,6 +193,7 @@ def main():
             "\n".join(
                 [
                     "SHIPYARD_BYPASS_TOKEN={}".format(environment_data["bypass_token"]),
+                    "SHIPYARD_ENVIRONMENT_ID={}".format(environment_id),
                     "SHIPYARD_ENVIRONMENT_URL={}".format(environment_data["url"]),
                     "SHIPYARD_ENVIRONMENT_READY={}".format(environment_data["ready"]),
                     "SHIPYARD_ENVIRONMENT_RETIRED={}".format(

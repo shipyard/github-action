@@ -75,7 +75,8 @@ On successful run, the following environment variables are set, which can then b
 | Parameter Name | Description |
 | --------------- | --------------- |
 |`SHIPYARD_ENVIRONMENT_URL` | URL of the ephemeral environment |
-|`SHIPYARD_BYPASS_TOKEN`    | Token to bypass authentication |
+|`SHIPYARD_ENVIRONMENT_ID`  | ID of the ephemeral environment  |
+|`SHIPYARD_BYPASS_TOKEN`    | Token to bypass authentication   |
 
 
 ## Resources
